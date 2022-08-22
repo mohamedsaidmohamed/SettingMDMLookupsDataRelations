@@ -3,13 +3,22 @@ using System.Collections.Generic;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace Persistence.DataModel
 {
     public partial class SafeerContext : DbContext
     {
+        private readonly IConfiguration _iConfiguration;
+        private readonly string _connectionString;
         public SafeerContext()
         {
+            IConfigurationBuilder builder = new ConfigurationBuilder()
+                       .SetBasePath(Directory.GetCurrentDirectory())
+                       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            _iConfiguration = builder.Build();
+            _connectionString = _iConfiguration.GetConnectionString("MDMConnectionString");
+
         }
 
         public SafeerContext(DbContextOptions<SafeerContext> options)
@@ -24,8 +33,7 @@ namespace Persistence.DataModel
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=192.168.34.95,1434; Initial Catalog=Safeer; User Id=saf2; Password=Safeer2");
+                 optionsBuilder.UseSqlServer(_connectionString);
             }
         }
 

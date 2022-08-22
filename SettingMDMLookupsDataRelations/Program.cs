@@ -1,7 +1,6 @@
-﻿// See https://aka.ms/new-console-template for more information
-
+﻿
 using Domain.Entities;
-using LookupRelatedDataManagementServiceSR;
+using Microsoft.Extensions.Configuration;
 using Persistence.Repositories;
 using SettingMDMLookupsDataRelations.Utilities;
 using System.ServiceModel;
@@ -32,7 +31,6 @@ namespace SettingMDMLookupsDataRelations
                 catch (Exception ex)
                 {
                 }
-                
             }
             Console.WriteLine("End...");
             Console.ReadLine();
