@@ -15,25 +15,32 @@ namespace SettingMDMLookupsDataRelations
 
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Start...");
+            try {
+                Console.WriteLine("Start...");
 
-            var ministryMajors =await  GetMinistryMajors();
-            foreach (var ministryMajor in ministryMajors)
-            {
-                try
+                var ministryMajors = await GetMinistryMajors();
+                foreach (var ministryMajor in ministryMajors)
                 {
-                    var Majors = await GetMajorsByMinistryMajor(ministryMajor.BusinessCode.Value);
-                    if (Majors != null) { 
-                        await repo.UpdateMajors(Majors.Select(x => x.Id).ToList(), ministryMajor.BusinessCode.Value);
-                        Console.WriteLine("Done for ministry major : " + ministryMajor.BusinessCode.Value);
+                    try
+                    {
+                        var Majors = await GetMajorsByMinistryMajor(ministryMajor.BusinessCode.Value);
+                        if (Majors != null)
+                        {
+                            await repo.UpdateMajors(Majors.Select(x => x.Id).ToList(), ministryMajor.BusinessCode.Value);
+                            Console.WriteLine("Done for ministry major : " + ministryMajor.BusinessCode.Value);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
                     }
                 }
-                catch (Exception ex)
-                {
-                }
+                Console.WriteLine("End...");
+                Console.ReadLine();
             }
-            Console.WriteLine("End...");
-            Console.ReadLine();
+            catch (Exception ex){
+                Console.WriteLine(ex.Message);
+                Console.ReadLine();
+            }
         }
 
         #region Helpers
